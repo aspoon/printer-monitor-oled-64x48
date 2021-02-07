@@ -1,4 +1,8 @@
-# Printer Monitor (OctoPrint 3D Printer Monitor)
+# Printer Monitor (OctoPrint 3D Printer Monitor) for 64x48 OLED
+
+Have a SSD1306 OLED 0.66" screen (https://www.wemos.cc/en/latest/d1_mini_shield/oled_0_66.html), so shrunk the fonts and tried to make things fit.
+
+(original README follows)
 
 ## New Easy Monitor Board Kit:
 Now available is the Pre Loaded Monitor Board Kit that comes ready to plug and play on your network.  
