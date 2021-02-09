@@ -915,20 +915,20 @@ void drawScreen1(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->setFont(ArialMT_Plain_10);
   if (bed != "0") {
-    display->drawString(14 + x, 0 + y, "Tool");
-    display->drawString(44 + x, 0 + y, "Bed");
+    display->drawString(12 + x, 0 + y, "Tool");
+    display->drawString(46 + x, 0 + y, "Bed");
   } else {
     display->drawString(32 + x, 0 + y, "Tool Temp");
   }
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_10);
+  display->setFont(ArialMT_Plain_16);
   if (bed != "0") {
     display->setTextAlignment(TEXT_ALIGN_LEFT);
-    display->drawString(6 + x, 12 + y, tool + "°");
-    display->drawString(37 + x, 12 + y, bed + "°");
+    display->drawString(0 + x, 11 + y, tool + "°");
+    display->drawString(37 + x, 11 + y, bed + "°");
   } else {
     display->setTextAlignment(TEXT_ALIGN_CENTER);
-    display->drawString(32 + x, 12 + y, tool + "°");
+    display->drawString(32 + x, 11 + y, tool + "°");
   }
 }
 
@@ -938,30 +938,30 @@ void drawScreen2(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
 
   display->drawString(32 + x, 0 + y, "Time Remain");
   //display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_10);
+  display->setFont(ArialMT_Plain_16);
   int val = printerClient.getProgressPrintTimeLeft().toInt();
   int hours = numberOfHours(val);
   int minutes = numberOfMinutes(val);
   int seconds = numberOfSeconds(val);
 
   String time = zeroPad(hours) + ":" + zeroPad(minutes) + ":" + zeroPad(seconds);
-  display->drawString(32 + x, 12 + y, time);
+  display->drawString(32 + x, 11 + y, time);
 }
 
 void drawScreen3(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->setFont(ArialMT_Plain_10);
 
-  display->drawString(32 + x, 0 + y, "Print Time");
+  display->drawString(32 + x, 0 + y, "Printing Time");
   //display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_10);
+  display->setFont(ArialMT_Plain_16);
   int val = printerClient.getProgressPrintTime().toInt();
   int hours = numberOfHours(val);
   int minutes = numberOfMinutes(val);
   int seconds = numberOfSeconds(val);
 
   String time = zeroPad(hours) + ":" + zeroPad(minutes) + ":" + zeroPad(seconds);
-  display->drawString(32 + x, 12 + y, time);
+  display->drawString(32 + x, 11 + y, time);
 }
 
 void drawClock(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
@@ -977,21 +977,21 @@ void drawClock(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16
   }
   display->setFont(ArialMT_Plain_10);
   display->drawString(32 + x, 0 + y, displayName);
-  display->setFont(ArialMT_Plain_10);
+  display->setFont(ArialMT_Plain_16);
   display->drawString(32 + x, 11 + y, displayTime);
 }
 
 void drawWeather(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_10);
+  display->setFont(ArialMT_Plain_16);
   display->drawString(0 + x, 0 + y, weatherClient.getTempRounded(0) + getTempSymbol());
   display->setTextAlignment(TEXT_ALIGN_LEFT);
   display->setFont(ArialMT_Plain_10);
 
   display->setFont(ArialMT_Plain_10);
-  display->drawString(0 + x, 12 + y, weatherClient.getCondition(0));
+  display->drawString(0 + x, 18 + y, weatherClient.getCondition(0));
   display->setFont((const uint8_t*)Meteocons_Plain_21);
-  display->drawString(43 + x, 0 + y, weatherClient.getWeatherIcon(0));
+  display->drawString(43 + x, 4 + y, weatherClient.getWeatherIcon(0));
 }
 
 String getTempSymbol() {
@@ -1030,31 +1030,29 @@ String zeroPad(int value) {
 void drawHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
   display->setColor(WHITE);
   display->setFont(ArialMT_Plain_10);
-  String displayTime = timeClient.getAmPmHours() + ":" + timeClient.getMinutes();
+  String displayTime = timeClient.getAmPmHours() + ":" + timeClient.getMinutes() + timeClient.getAP();
   if (IS_24HOUR) {
     displayTime = timeClient.getHours() + ":" + timeClient.getMinutes();
   }
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->drawString(0, 24, displayTime);
+  display->drawString(0, 36, displayTime);
   
-  if (!IS_24HOUR) {
-    String ampm = timeClient.getAmPm();
-    display->setFont(ArialMT_Plain_10);
-    display->drawString(19, 27, ampm);
-  }
+//  if (!IS_24HOUR) {
+//    String ampm = timeClient.getAmPm();
+//    display->setFont(ArialMT_Plain_10);
+//    display->drawString(19, 36, ampm);
+//  }
 
   display->setFont(ArialMT_Plain_10);
-  display->setTextAlignment(TEXT_ALIGN_LEFT);
+  display->setTextAlignment(TEXT_ALIGN_RIGHT);
   String percent = String(printerClient.getProgressCompletion()) + "%";
-  display->drawString(32, 24, percent);
+  display->drawString(55, 36, percent);
   
   // Draw indicator to show next update
   int updatePos = (printerClient.getProgressCompletion().toFloat() / float(100)) * 64;
-  display->drawRect(0, 41, 64, 6);
-  display->drawHorizontalLine(0, 42, updatePos);
-  display->drawHorizontalLine(0, 43, updatePos);
-  display->drawHorizontalLine(0, 44, updatePos);
-  display->drawHorizontalLine(0, 45, updatePos);
+  display->drawRect(0, 30, 64, 4);
+  display->drawHorizontalLine(0, 31, updatePos);
+  display->drawHorizontalLine(0, 32, updatePos);
   
   drawRssi(display);
 }
@@ -1064,26 +1062,26 @@ void drawClockHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
   display->setFont(ArialMT_Plain_10);
   display->setTextAlignment(TEXT_ALIGN_LEFT);
   if (!IS_24HOUR) {
-    display->drawString(0, 24, timeClient.getAmPm());
+    display->drawString(0, 36, timeClient.getAmPm());
     display->setTextAlignment(TEXT_ALIGN_CENTER);
     if (printerClient.isPSUoff()) {
-      display->drawString(32, 24, "psu off");
+      display->drawString(34, 36, "psu off");
     } else if (printerClient.getState() == "Operational") {
-      display->drawString(32, 24, "online");
+      display->drawString(34, 36, "online");
     } else {
-      display->drawString(32, 24, "offline");
+      display->drawString(34, 36, "offline");
     }
   } else {
     if (printerClient.isPSUoff()) {
-      display->drawString(0, 24, "psu off");
+      display->drawString(0, 36, "psu off");
     } else if (printerClient.getState() == "Operational") {
-      display->drawString(0, 24, "online");
+      display->drawString(0, 36, "online");
     } else {
-      display->drawString(0, 24, "offline");
+      display->drawString(0, 36, "offline");
     }
   }
   display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->drawRect(0, 43, 64, 2);
+  display->drawRect(0, 30, 64, 4);
  
   drawRssi(display);
 }
@@ -1095,7 +1093,7 @@ void drawRssi(OLEDDisplay *display) {
   for (int8_t i = 0; i < 4; i++) {
     for (int8_t j = 0; j < 2 * i + 1; j++) {
       if (quality > i * 25 || j == 0) {
-        display->setPixel(57 + 2 * i, 32 - j);
+        display->setPixel(57 + 2 * i, 45 - j);
       }
     }
   }

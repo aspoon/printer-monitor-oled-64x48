@@ -135,6 +135,14 @@ String TimeClient::getAmPm() {
 	return ampmValue;
 }
 
+String TimeClient::getAP() {
+  int hours = getHours().toInt();
+  String apValue = "a";
+  if (hours >= 12) {
+    apValue = "p";
+  }
+  return apValue;
+}
 String TimeClient::getFormattedTime() {
   return getHours() + ":" + getMinutes() + ":" + getSeconds();
 }

@@ -51,6 +51,7 @@ class TimeClient {
     String getHours();
     String getAmPmHours();
     String getAmPm();
+    String getAP();
     String getMinutes();
     String getSeconds();
     String getFormattedTime();
@@ -59,4 +60,3 @@ class TimeClient {
     long getCurrentEpochWithUtcOffset();
 
 };
-
